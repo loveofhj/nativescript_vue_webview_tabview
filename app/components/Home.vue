@@ -1,18 +1,21 @@
 <template>
-    <Page>
-        <ActionBar>
-            <Label text="Home"/>
+<frame id="homeview">
+    <Page  actionBarHidden="true">
+        <ActionBar  style="background-color" >
+          <Label text="home"  horizontalAlignment="center" verticalAlignment="top" />                      
         </ActionBar>
-
-        <GridLayout>
-            <Label class="info">
+        <GridLayout rows="*,*" cols="*" >
+           <button row="0" col="0" text="test" @tap="onClickBtn"/>
+            <Label row="1" col="0" class="info">
                 <FormattedString>
                     <Span class="fas" text.decode="&#xf135; "/>
                     <Span :text="message"/>
                 </FormattedString>
             </Label>
+            
         </GridLayout>
     </Page>
+</frame>
 </template>
 
 <script>
@@ -21,6 +24,12 @@
       message() {
         return "Blank {N}-Vue app";
       }
+    },
+    methods: {
+      onClickBtn(){
+        this.$store.dispatch("tabview/setSessionIndex", 1);
+        console.log("Button clicked!!")
+      },
     }
   };
 </script>

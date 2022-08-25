@@ -3,7 +3,7 @@
         <ActionBar>
             <NavigationButton visibility="collapse" v-if="!isAndroid" @tap="goBack" text="Back" android.systemIcon="ic_menu_back" />
             <StackLayout orientation="horizontal">
-                <Image src="~/images/LOGO_JBCD_1.png" width="80" verticalAlignment="center" />
+                <!-- <Image src="~/images/LOGO_JBCD_1.png" width="80" verticalAlignment="center" /> -->
             </StackLayout>
         </ActionBar>
         <TabView tabTextFontSize="5" androidTabsPosition="bottom" tabTextColor="#767A79" selectedTabTextColor="#004097" androidSelectedTabHighlightColor="#004097" @selectedIndexChanged="selectedIndexChanged">

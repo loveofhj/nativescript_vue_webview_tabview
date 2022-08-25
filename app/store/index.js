@@ -7,8 +7,7 @@ Vue.use(Vuex);
 import tabview from './module/tabviewStore'
 
 export default new Vuex.Store({
-    modules:{
- 
+    modules:{ 
         tabview: tabview,  
         
     },
