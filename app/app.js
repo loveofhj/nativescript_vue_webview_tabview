@@ -1,7 +1,9 @@
 import Vue from 'nativescript-vue'
 
-import Home from './components/Home'
+import store from './store/index'
+import tabview from './components/tabview'
 
 new Vue({
-  render: (h) => h('frame', [h(Home)]),
+  store,
+  render: (h) =>  h(tabview), //h('frame', [h(Home)]),
 }).$start()
