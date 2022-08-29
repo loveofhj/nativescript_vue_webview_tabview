@@ -12,7 +12,7 @@ const tabviewStore = {
     },
     mutations: {
         // 데이터 변환 부분(데이터를 실제로 변환하는 것은 이 부분에서만 가능)
-        setTabViewIndex: function(state, tabViewIndex) {
+        setTabViewIndex: function(state, tabViewIndex) {            
             state.tabViewIndex = tabViewIndex;
         },
         setSession: function(state, item){
