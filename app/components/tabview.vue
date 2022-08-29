@@ -16,6 +16,10 @@
                 <webviewTest />
             </TabViewItem>
 
+            <TabViewItem title="Chat View" >
+                <chatView />
+            </TabViewItem>
+
         </TabView>
     </Page>
 </template>
@@ -24,12 +28,14 @@
 
 import homeview from "./Home.vue"
 import webviewTest from "./webviewTest.vue"
+import chatView from "./chatView.vue"
 
 
 export default {
     components: { 
         homeview,
         webviewTest,
+        chatView,
        
     },        
     methods: {

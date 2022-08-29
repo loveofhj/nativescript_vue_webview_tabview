@@ -27,7 +27,7 @@
     },
     methods: {
       onClickBtn(){
-        this.$store.dispatch("tabview/setSessionIndex", 1);
+        this.$store.dispatch("tabview/setSessionIndex", "1");
         console.log("Button clicked!!")
       },
     }
