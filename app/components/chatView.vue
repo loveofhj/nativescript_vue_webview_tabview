@@ -4,39 +4,58 @@
             <ActionBar  style="background-color" >
               <Label text="Chat"  horizontalAlignment="center" verticalAlignment="top" />                      
             </ActionBar>
-            <GridLayout rows="*" cols="*" >
-                <LineChart ref="chart" width="300" height="400" @loaded="onChartLoaded"> </LineChart>
+            <GridLayout rows="50,*,50" cols="*" >
+                <Button row="0" col="0" text="getChatData" @tap="onClickBtn"/>                
+                <GridLayout row="1" col="0" rows="*" cols="*">
+                    <ListView ref="listViewUI" for="item in this.$store.state.chat.history" class="nsChatView-messageList" height="*" horizontalAlignment="stretch" verticalAlignment="stretch">
+                        <v-template>
+                            <GridLayout col="0" row="0"  rows="auto" cols="auto,*,auto">
+                                
+                               
+                                    <!-- visibility="{{ image ? 'visible' : 'collapsed' }}" /> -->
+                                <StackLayout  col="1" row="0">
+                                <GridLayout col="0" row="0" rows="30,auto,30" cols="*" :class="'nsChatView-item-'+(item.INVID == null ? 'right' : 'left')">                                
+                                    <label row="0" col="1" :text="item.SUBJ_FLAG" class="nsChatView-item" verticalAlignment="top" :horizontalAlignment="(item.INVID == null ? 'right' : 'left')"/>
+                                    <label row="1" col="0" :text="item.QNACONTENT" class="nsChatView-item" verticalAlignment="top" :horizontalAlignment="(item.INVID == null ? 'right' : 'left')" />
+                                    <label row="2" col="0" :text="item.QNADTC" class="nsChatView-item" verticalAlignment="top" :horizontalAlignment="(item.INVID == null ? 'right' : 'left')"  />                                
+                                </GridLayout>    
+                                </StackLayout>
+                                <Image row="0" col="(item.INVID == null ? '2' : '0')" class="nsChatView-avatar" verticalAlignment="center" 
+                                :src="(item.INVID == null ? '~/img/marcel.jpg' : '~/img/alert.jpg')"
+                                :horizontalAlignment="(item.INVID == null ? 'left' : 'right')" />
+                            </GridLayout >                                                    
+                        </v-template>                        
+                    </ListView>
+                </GridLayout>                
+                <StackLayout row="2" col="0"  orientation="horizontal" *>
+                    <TextField hint="내용을 입력하세요" width="70%" />
+                    <Button class="nsChatView-sendMessageArea-Button" width="30%" text="send" @tap="onClickSendBtn" />
+                </StackLayout>
             </GridLayout>
         </Page>
     </frame>
-    </template>
+</template>
     
     <script>
-    
-
-    
+       
         
       export default {
         data(){
-            return{ 
-                chatData: [
-                {            
-                    date: "",
-                    isRight: true,
-                    image: "~/img/me.jpg",
-                    message: "My message",    
-                }, {            
-                    date: "",
-                    isRight: false,
-                    image: "~/img/friend.jpg",
-                    message: "Friend's message",    
-                }
-                ]
+            return {
+                
             }
         },
-       
         methods: {
-           
+            onClickSendBtn(){                
+
+            },
+            onClickBtn(){
+                var params = {
+                    sid: 1,
+                    said: 106
+                }
+                this.$store.dispatch("chat/getChatInfo", params);      
+            },           
         }
       };
     </script>
@@ -45,81 +64,43 @@
         @import '@nativescript/theme/scss/variables/blue';
     
         // Custom styles
-        .nsChatView-view .nsChatView-sendMessageArea {
-            margin: 4,0,0,0;
-            background-color: #e8e8e8;
+        .nsChatView-item{
+            margin: 0,16,0,16;
         }
-
-        .nsChatView-view .nsChatView-sendMessageArea Button {
-            background-color: transparent;
-            margin: 0;
-        }
-
-        .nsChatView-view .nsChatView-messageList {
-            background-color: transparent;
-            border-color: transparent;
-            border-width: 0;
-            margin: 0;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-avatar,
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-avatar {
-            margin: 8;
-            border-radius: 32;
-            width: 64;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-separator,
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-separator {
-            border-color: transparent;
-            border-width: 0;
-            width: 32;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-message,
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-message {
-            margin: 8;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-messageArea,
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-messageArea {
-            border-radius: 8;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-messageArea {
-            background-color: #edeef2;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-messageArea {
-            background-color: #00b863;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-messageArea .nsChatView-content,
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-messageArea .nsChatView-content {
+        .nsChatView-item-right {
             margin: 12,16,12,16;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-messageArea Label,
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-messageArea Label {
-            margin: 0;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-messageArea .nsChatView-content Label {
-            color: black;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-messageArea .nsChatView-content Label {
+            border-radius: 32;
+            
+            background-color: #00b863;
             color: white;
-        }
-
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-left .nsChatView-messageArea .nsChatView-content .nsChatView-date,
-        .nsChatView-view .nsChatView-messageList .nsChatView-item-right .nsChatView-messageArea .nsChatView-content .nsChatView-date {
             font-size: 11;
             margin-bottom: 12;
         }
-
-        .nsChatView-view .nsChatView-messageField {
-            font-size: 14;
+        .nsChatView-item-left {
+            margin: 12,16,12,16;
+            border-radius: 32;                      
+            background-color: #e8e8e8;          
+            font-size: 11;
+            margin-bottom: 12;
         }
+        .nsChatView-avatar{
+            margin: 32
+            ;
+            border-radius: 32;
+            width: 64;
+        }
+        
+        .nsChatView-messageList {
+            background-color: transparent;
+            border-color: transparent;
+            border-width: 0;
+            margin: 0;
+        }
+
+        .nsChatView-sendMessageArea-Button {
+            background-color: transparent;
+            margin: 0;
+        }
+        
     </style>
     
