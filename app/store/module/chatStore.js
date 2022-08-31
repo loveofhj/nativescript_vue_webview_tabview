@@ -15,6 +15,16 @@ const chatStore = {
         setHistory: function(state, history) {
             state.history = history;
         },
+        insetHistory: function(state, item) {
+            var tempItem = JSON.stringify({                                         
+                "SAID":  item.SAID,  //대상자 연구 등록 번호
+                "INVID": item.INVID, //연구자 식별 번호
+                "QNADTC": item.QNADTC,  //작성일자
+                "QNACONTENT": item.qnacontent  , //QnA내용
+                "SUBJ_FLAG": item.SUBJ_FLAG // 대상자가 읽었느지 확인(1: 읽음, 2:안읽음)                      
+            })
+            state.history.push(tempItem);
+        }
     },
     actions: {
         getChatInfo: function(context, params){
@@ -47,18 +57,17 @@ const chatStore = {
         insertMessage: function(context, params){
             return new Promise((resolve, reject) => {
                 Http.request({
-                    url: 'http://203.254.143.108:8003/study/qna/106',
+                    url: 'http://203.254.143.108:8003/study/qna',
                     method: 'POST',   
                     headers: { "Content-Type": "application/json" }, 
                     content: JSON.stringify({                        
-                        SAID: params.SAID,
-                        INVID: params.INVID,
-                        QNADTC: params.QNADTC,
-                        QNACONTENT: params.QNACONTENT,
-                        SUBJ_FLAG: params.SUBJ_FLAG
+                        said: params.said,
+                        applid: params.applid,
+                        qnacontent: params.qnacontent                        
                     }),                                    
                 })
-                .then((HttpResponse) => {
+                .then((HttpResponse) => {                    
+                    console.log("insertMessage Done!");
                     resolve(JSON.parse(HttpResponse.content));
                 },
                 err => {
