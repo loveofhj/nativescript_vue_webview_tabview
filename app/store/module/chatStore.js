@@ -14,17 +14,8 @@ const chatStore = {
         // 데이터 변환 부분(데이터를 실제로 변환하는 것은 이 부분에서만 가능)      
         setHistory: function(state, history) {
             state.history = history;
-        },
-        insetHistory: function(state, item) {
-            var tempItem = JSON.stringify({                                         
-                "SAID":  item.SAID,  //대상자 연구 등록 번호
-                "INVID": item.INVID, //연구자 식별 번호
-                "QNADTC": item.QNADTC,  //작성일자
-                "QNACONTENT": item.qnacontent  , //QnA내용
-                "SUBJ_FLAG": item.SUBJ_FLAG // 대상자가 읽었느지 확인(1: 읽음, 2:안읽음)                      
-            })
-            state.history.push(tempItem);
         }
+       
     },
     actions: {
         getChatInfo: function(context, params){
@@ -42,11 +33,11 @@ const chatStore = {
                     let response = JSON.parse(HttpResponse.content);
                     if(response.rows > 0) {
                         var jsonData =JSON.parse( JSON.stringify( HttpResponse.content ) );    
-                        console.log(jsonData.output)
+                        //console.log(jsonData.output)
                         context.commit('setHistory', JSON.parse(JSON.stringify(jsonData.output)));
                     }
                     resolve(JSON.parse(HttpResponse.content));
-                    console.log(JSON.parse(HttpResponse.content))
+                    //console.log(JSON.parse(HttpResponse.content))
                 },
                 err => {
                     console.log(err)
@@ -67,7 +58,7 @@ const chatStore = {
                     }),                                    
                 })
                 .then((HttpResponse) => {                    
-                    console.log("insertMessage Done!");
+                    //console.log("insertMessage Done!");
                     resolve(JSON.parse(HttpResponse.content));
                 },
                 err => {

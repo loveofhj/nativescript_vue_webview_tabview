@@ -7,7 +7,12 @@
             <GridLayout rows="50,*,50" cols="*" >
                 <Button row="0" col="0" text="getChatData" @tap="onClickBtn"/>                
                 <GridLayout row="1" col="0" rows="*" cols="*">
-                    <ListView ref="listViewUI" for="item in this.$store.state.chat.history" class="nsChatView-messageList" height="*" horizontalAlignment="stretch" verticalAlignment="stretch">
+                    <RadListView  ref="listViewUI" 
+                              for="item in this.$store.state.chat.history"
+                              android:transcriptMode="alwaysScroll"  
+                              android:stackFromBottom="true"
+                              @loaded="onLoaded"
+                              class="nsChatView-messageList" height="*" horizontalAlignment="stretch" verticalAlignment="stretch">
                         <v-template>
                             <GridLayout col="0" row="0"  rows="auto" cols="auto,*,auto">
                                     <!-- visibility="{{ image ? 'visible' : 'collapsed' }}" /> -->
@@ -23,7 +28,7 @@
                                 :horizontalAlignment="(item.INVID == null ? 'left' : 'right')" />
                             </GridLayout >                                                    
                         </v-template>                        
-                    </ListView>
+                    </RadListView>
                 </GridLayout>                
                 <StackLayout row="2" col="0"  orientation="horizontal" *>
                     <TextField hint="내용을 입력하세요" v-model="sendInput" width="70%" @tap="onTapTextField" />
@@ -42,6 +47,13 @@
         },
 
         methods: {
+            onLoaded(){
+                var itemSize = this.$refs.listViewUI.items.length;
+                if (itemSize > 0){
+                    this.$refs.listViewUI.scrollToIndex(itemSize-1)
+                }
+                
+            },
             getStrDate(){            
                 var today = new Date();                
                 var year = today.getFullYear();
@@ -63,13 +75,14 @@
                 
                 return date.toString()
             }, 
-            onTapTextField(){
-                var itemSize = this.$refs["listViewUI"].items.length - 1;
-                this.$refs["listViewUI"].refresh();
-                //this.$refs["listViewUI"].android.smoothScrollToPosition(itemSize);
+            onTapTextField: async function(){
+                var itemSize = this.$refs.listViewUI.items.length;
+                
+                await this.$refs.listViewUI.scrollToIndex(itemSize-1);
+                await this.$refs.listViewUI.refresh();
 
-                console.log("Item Size: " + itemSize);
-                //this.$refs["listViewUI"].scrollToIndex();
+                //console.log("Item Size: " + itemSize);
+                //this.$refs.listViewUI.scrollToIndex();
             },
             onClickSendBtn: async function(){                
                 var params = {
@@ -78,21 +91,41 @@
                             "qnacontent": this.sendInput                                        
                         };
 
-                console.log(JSON.stringify(params));
+                //console.log(JSON.stringify(params));
 
-                await this.$store.dispatch("chat/insertMessage",params);
+                await this.$store.dispatch("chat/insertMessage",params);                
                 
-                await this.$store.dispatch("chat/getChatInfo",params);
-                this.$refs["listViewUI"].refresh();
+                
+
+
+                var reparams = {
+                    sid: 1,
+                    said: 106
+                };
+
+                //console.log(JSON.stringify(reparams));
+                await this.$store.dispatch("chat/getChatInfo",reparams);
+
+                var itemSize = this.$refs.listViewUI.items.length;      
+                await this.$refs.listViewUI.scrollToIndex(itemSize-1);
+                await this.$refs.listViewUI.refresh();
+
+                //console.log("onClickSendBtn Done!!");
             },
             onClickBtn: async function(){
                 var params = {
                     sid: 1,
                     said: 106
-                }
+                };
 
-                await this.$store.dispatch("chat/getChatInfo", params);      
-                this.$refs["listViewUI"].refresh();
+                await this.$store.dispatch("chat/getChatInfo", params);    
+                var itemSize = this.$refs.listViewUI.items.length;
+               
+                //this.$refs.listViewUI.setTranscriptMode(this.$refs.listViewUI.TRANSCRIPT_MODE_ALWAYS_SCROLL);  
+
+                await this.$refs.listViewUI.scrollToIndex(itemSize-1)
+
+                await this.$refs.listViewUI.refresh();
             },           
         }
       };

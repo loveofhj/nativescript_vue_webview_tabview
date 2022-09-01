@@ -7,6 +7,8 @@ Vue.use(Vuex);
 import tabview from './module/tabviewStore'
 import chat from './module/chatStore'
 
+import RadListView from 'nativescript-ui-listview/vue';
+Vue.use(RadListView);
 
 export default new Vuex.Store({
     modules:{ 
